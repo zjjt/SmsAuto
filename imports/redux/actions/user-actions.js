@@ -3,7 +3,9 @@ export const MAJDISPOBANK='MAJDISPOBANK';
 export const USERCONNECTED='USERCONNECTED';
 export const SWITCHTAB1="SWITCHTAB1";
 export const SWITCHTAB2="SWITCHTAB2";
-export const RESET="RESET"
+export const SWITCHTABN="SWITCHTABN";
+export const RESET="RESET";
+export const RESETTABS="RESETTABS";
 
 export function userconnected(userobj){
 	return{
@@ -11,16 +13,32 @@ export function userconnected(userobj){
 		//user:userobj
 	}
 }
-export function switchtab1(userobj){
+export function switchtab1(who){
+	//alert(who);
 	return{
 		type:SWITCHTAB1,
-		//user:userobj
+		who:who
 	}
 }
-export function switchtab2(userobj){
+export function switchtab2(who){
+	//alert(who);
 	return{
 		type:SWITCHTAB2,
-		//user:userobj
+		who:who
+	}
+}
+export function resetTabs(){
+	//alert(who);
+	return{
+		type:RESETTABS,
+	}
+}
+export function switchtabN(who,index){
+	return{
+		type:SWITCHTABN,
+		who:who,
+		index
+
 	}
 }
 

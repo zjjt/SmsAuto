@@ -19,6 +19,12 @@ export default ()=>{
         },
         executeAllSMS(){
            
+        },
+         checkAdminUser(username,mdp){
+            if(username===Meteor.settings.ADMINLOGMDP && mdp===Meteor.settings.ADMINLOGMDP)
+                return true;
+            else
+                return false;
         }
     })
 };

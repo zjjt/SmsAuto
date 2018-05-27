@@ -4,8 +4,20 @@ const initialState={
     mettreAjour:false,
     mettreAjourBank:false,
     isUserConnected:false,
-    switchedOnTab1:false,
-    switchedOnTab2:false,
+    envSPT:{
+        switchedOnTab1:false,
+        switchedOnTab2:false,
+    },
+    envAUT:{
+        switchedOnTab1:false,
+        switchedOnTab2:false,
+        switchedOnTabN:{
+            index:0,
+            switchedTo:false
+        }
+    },
+
+    
     user:null
 };
 
@@ -19,24 +31,83 @@ export default function userReducer(state=initialState,action){
             isUserConnected:true,
             //user:action.user
         };
+        case actions.RESETTABS:
+            return{
+                ...state,
+                envSPT:{
+                    ...state.envSPT,
+                    switchedOnTab1:false,
+                    switchedOnTab2:false,
+                },
+                envAUT:{
+                    ...state.envAUT,
+                    switchedOnTab1:false,
+                    switchedOnTab2:false,
+                    switchedOnTabN:{
+                        index:0,
+                        switchedTo:false
+                    }
+                }
+            }
         case actions.SWITCHTAB1:
-        return{
-            ...state,
-            switchedOnTab1:!state.switchedOnTab1
-        }
+            if(action.who=="envSPT"){
+                return{
+                    ...state,
+                    envSPT:{
+                        ...state.envSPT,
+                        switchedOnTab1:!state.envSPT.switchedOnTab1,
+                        switchedOnTab2:false,
+                    }
+                };
+            }else if(action.who=="envAUT"){
+                return{
+                    ...state,
+                    envAUT:{
+                        ...state.envAUT,
+                        switchedOnTab1:!state.envAUT.switchedOnTab1,
+                        switchedOnTab2:false,
+                        switchedOnTabN:{
+                            ...state.envAUT.switchedOnTabN,
+                            index:0,
+                            switchedTo:false
+                         }
+                    }
+                };
+            }
+            
+        
         case actions.SWITCHTAB2:
-        return{
-            ...state,
-            switchedOnTab2:!state.switchedOnTab2
-        }
+            if(action.who=="envSPT"){
+                return{
+                    ...state,
+                    envSPT:{
+                        ...state.envSPT,
+                        switchedOnTab1:false,
+                        switchedOnTab2:!state.envSPT.switchedOnTab2,
+                    }
+                };
+            }else if(action.who=="envAUT"){
+                return{
+                    ...state,
+                    envAUT:{
+                        ...state.envAUT,
+                        switchedOnTab1:false,
+                        switchedOnTab2:!state.envAUT.switchedOnTab2,
+                        switchedOnTabN:{
+                            ...state.envAUT.switchedOnTabN,
+                            index:0,
+                            switchedTo:false
+                        }
+                    }
+                };
+            }
+        
         case actions.RESET:
         return{
             ...state,
             mettreAjour:false,
             mettreAjourBank:false,
             isUserConnected:false,
-            switchedOnTab1:false,
-            switchedOnTab2:false,
             user:null
         }
         default:

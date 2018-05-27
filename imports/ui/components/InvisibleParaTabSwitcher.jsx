@@ -8,7 +8,7 @@ import FlatButton from 'material-ui/FlatButton';
 import {TextField} from 'redux-form-material-ui';
 import ActionExitToApp from 'material-ui/svg-icons/action/exit-to-app';
 import Divider from 'material-ui/Divider';
-import {switchtab1,switchtab2} from '../../redux/actions/user-actions'; 
+import {switchtab1,switchtab2,resetTabs} from '../../redux/actions/user-actions'; 
 //import ModVendor from '../components/ModVendor';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import LoginUserCont from './LoginUserCont';
@@ -24,6 +24,7 @@ import SwipeableViews from 'react-swipeable-views';
         };
 
     }
+
     handleSlideChange = (value) => {
         this.setState({
           slideIndex: value,
@@ -42,27 +43,45 @@ import SwipeableViews from 'react-swipeable-views';
         }
         //si quand on monte le component il est a la vue deux on affiche la premiere vue
         if(this.state.slideIndex>0){
-            this.props.dispatch(switchtab1());//toggle on
+            this.props.dispatch(resetTabs());//toggle on
             this.setState({
                 slideIndex: 0,
                 shouldChange:false
             });
             console.log(changeTabTo+"   "+whichTab)
+            
         }
        
     }
 
     componentDidUpdate(){
         const {changeTabTo,whichTab}=this.props;
-        if(changeTabTo && whichTab==1){
-            console.log(changeTabTo+"   "+whichTab)
-            this.handleSlideChange(whichTab);
-            this.props.dispatch(switchtab2());
-        }else if(changeTabTo && whichTab==1){
+       // console.log(changeTabTo+"   "+whichTab);
+        //console.dir(this.props);
+        if(changeTabTo!="" && typeof changeTabTo!="undefined" && whichTab==1){
+            switch(changeTabTo){
+                case "envSPT_P2":
+                    if(this.props.who=="envSPT"){
+                        console.log(changeTabTo+"   "+whichTab)
+                        this.handleSlideChange(whichTab);
+                        this.props.dispatch(resetTabs()); 
+                    }    
+                    return;
+                case "envAUT_P2":
+                    if(this.props.who=="envAUT"){
+                        console.log(changeTabTo+"   "+whichTab)
+                        this.handleSlideChange(whichTab);
+                        this.props.dispatch(switchtab2("envAUT")); 
+                    }
+                    
+                    return;
+            }
+            
+        }/*else if(changeTabTo && whichTab==2){
             console.log(changeTabTo+"   "+whichTab)
             this.handleSlideChange(whichTab);
             this.props.dispatch(switchtab1());
-        }
+        }*/
         
         /*if(this.state.shouldChange){
             this.handleSlideChange(whichTab);
@@ -70,7 +89,7 @@ import SwipeableViews from 'react-swipeable-views';
         }*/
     }
     render(){
-        console.dir(this.state);
+        //console.dir(this.state);
         return(
             <div className="centeredContentSingleColumnInvisible">
                 <Tabs
@@ -112,9 +131,10 @@ import SwipeableViews from 'react-swipeable-views';
 }
 
 export default connect((state,dispatch)=>{
+    console.dir(state);
     return {
-        whichTab:state.user.switchedOnTab1?0:state.user.switchedOnTab2?1:null,
-        changeTabTo:state.user.switchedOnTab1?state.user.switchedOnTab1:state.user.switchedOnTab2?state.user.switchedOnTab2:false
+        whichTab:state.user.envSPT.switchedOnTab1 || state.user.envAUT.switchedOnTab1?0:state.user.envSPT.switchedOnTab2 || state.user.envAUT.switchedOnTab2?1:null,
+        changeTabTo:state.user.envSPT.switchedOnTab1?"envSPT_P1":state.user.envSPT.switchedOnTab2?"envSPT_P2":state.user.envAUT.switchedOnTab1?"envAUT_P1":state.user.envAUT.switchedOnTab2?"envAUT_P2":''
     }
 })(InvisibleParaTabSwitcher)
 

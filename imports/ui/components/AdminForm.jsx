@@ -36,7 +36,34 @@ import {Meteor} from 'meteor/meteor'
         const {handleSubmit,pristine,submitting}=this.props;
         //console.log(this.state.champsRemplis)
         const submit=(values,dispatch)=>{
-            dispatch(switchtab2());
+            if(values.admin===''||!values.admin){
+                this.setState({
+                    errorMsg:"Le champs nom d'administrateur ne peut être vide."
+                });
+                this._dialogOpen();
+            }else if(values.password===''||!values.password){
+                this.setState({
+                    errorMsg:"Le champs mot de passe ne peut être vide."
+                });
+                this._dialogOpen();
+
+            }
+            else{
+                Meteor.call("checkAdminUser",values.admin,values.password,(err,res)=>{
+                    if(err){
+                        this.setState({
+                        errorMsg:"Mauvais identifiant administrateur ou mot de passe entré"
+                    });
+                    this._dialogOpen();
+                    }
+                    else{
+                        console.log('tout est bon');
+                        dispatch(switchtab2("envAUT"));                 
+                    }
+                });
+                
+            }
+           
             
            /* if(values.username===''||!values.username){
                 this.setState({
@@ -77,10 +104,10 @@ import {Meteor} from 'meteor/meteor'
                 </Dialog>
                 <form onSubmit={handleSubmit(submit)}>
                     <Field 
-                        name="username" 
+                        name="admin" 
                         component={TextField}
-                        hintText="Entrez votre nom d'utilisateur"
-                        floatingLabelText="Nom d'utilisateur"
+                        hintText="Entrez votre nom d'administrateur"
+                        floatingLabelText="Nom d'administrateur"
                         fullWidth={true}                      
                     />
                     <Field 

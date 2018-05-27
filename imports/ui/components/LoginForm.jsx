@@ -36,7 +36,7 @@ import {Meteor} from 'meteor/meteor'
         const {handleSubmit,pristine,submitting}=this.props;
         //console.log(this.state.champsRemplis)
         const submit=(values,dispatch)=>{
-            dispatch(switchtab2());
+            dispatch(switchtab2("envSPT"));
             
            /* if(values.username===''||!values.username){
                 this.setState({

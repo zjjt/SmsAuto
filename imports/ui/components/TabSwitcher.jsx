@@ -83,7 +83,7 @@ export default class TabSwitcher extends Component {
                         onChangeIndex={this.handleSlideChange}
                     >
                         <div>
-                            <InvisibleParaTabSwitcher 
+                            <InvisibleParaTabSwitcher who={"envSPT"}
                                 tabs={[{
                                     title:"connexion",
                                     component:<LoginUserCont/>
@@ -94,7 +94,7 @@ export default class TabSwitcher extends Component {
                             />
                         </div>
                         <div>
-                            <InvisibleParaTabSwitcher 
+                            <InvisibleParaTabSwitcher who={"envAUT"}
                                 tabs={[{
                                     title:"connexion",
                                     component:<AdminUserCont/>
