@@ -12,9 +12,10 @@ import {Tabs, Tab} from 'material-ui/Tabs';
 import FontIcon from 'material-ui/FontIcon';
 import InvisibleParaTabSwitcher from './InvisibleParaTabSwitcher';
 import EnvoiSpontForm from './EnvoiSpontForm';
+import ConfigList from './ConfigList';
 import LoginUserCont from './LoginUserCont';
 import AdminUserCont from './AdminUserCont';
-
+import CreateConfig from './CreateConfig';
 import {resetState} from '../../redux/actions/user-actions';
 import {deconnection} from '../../redux/actions/admin-actions';
 import SwipeableViews from 'react-swipeable-views';
@@ -37,6 +38,7 @@ export default class TabSwitcher extends Component {
         $('.toolbarTitle').delay(18000).show().addClass("fadeInRight animated");
     }
     render(){
+        console.dir(this.props);
         const {dispatch}=this.props;
         return(
             <div className="centeredContentSingleColumn">
@@ -100,10 +102,10 @@ export default class TabSwitcher extends Component {
                                     component:<AdminUserCont/>
                                 },{
                                     title:"mesconfig",
-                                    component:<EnvoiSpontForm/>
+                                    component:<ConfigList dispatch={dispatch}/>
                                 },{
                                     title:"creationConfig",
-                                    component:<EnvoiSpontForm/>
+                                    component:<CreateConfig  dispatch={dispatch}/>
                                 },{
                                     title:"modifConfig",
                                     component:<EnvoiSpontForm/>

@@ -8,7 +8,7 @@ import FlatButton from 'material-ui/FlatButton';
 import {TextField} from 'redux-form-material-ui';
 import ActionExitToApp from 'material-ui/svg-icons/action/exit-to-app';
 import Divider from 'material-ui/Divider';
-import {switchtab1,switchtab2,resetTabs} from '../../redux/actions/user-actions'; 
+import {switchtab1,switchtab2,switchtab3,switchtab4,resetTabs} from '../../redux/actions/user-actions'; 
 //import ModVendor from '../components/ModVendor';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import LoginUserCont from './LoginUserCont';
@@ -71,9 +71,22 @@ import SwipeableViews from 'react-swipeable-views';
                     if(this.props.who=="envAUT"){
                         console.log(changeTabTo+"   "+whichTab)
                         this.handleSlideChange(whichTab);
-                        this.props.dispatch(switchtab2("envAUT")); 
+                        this.props.dispatch(resetTabs()); 
                     }
-                    
+                    return;
+                case "envAUT_P3":
+                    if(this.props.who=="envAUT"){
+                        console.log(changeTabTo+"   "+whichTab)
+                        this.handleSlideChange(whichTab);
+                        this.props.dispatch(resetTabs()); 
+                    }
+                    return;
+                case "envAUT_P4":
+                    if(this.props.who=="envAUT"){
+                        console.log(changeTabTo+"   "+whichTab)
+                        this.handleSlideChange(whichTab);
+                        this.props.dispatch(resetTabs()); 
+                    }
                     return;
             }
             
@@ -133,8 +146,8 @@ import SwipeableViews from 'react-swipeable-views';
 export default connect((state,dispatch)=>{
     console.dir(state);
     return {
-        whichTab:state.user.envSPT.switchedOnTab1 || state.user.envAUT.switchedOnTab1?0:state.user.envSPT.switchedOnTab2 || state.user.envAUT.switchedOnTab2?1:null,
-        changeTabTo:state.user.envSPT.switchedOnTab1?"envSPT_P1":state.user.envSPT.switchedOnTab2?"envSPT_P2":state.user.envAUT.switchedOnTab1?"envAUT_P1":state.user.envAUT.switchedOnTab2?"envAUT_P2":''
+        whichTab:state.user.envSPT.switchedOnTab1 || state.user.envAUT.switchedOnTab1?0:state.user.envSPT.switchedOnTab2 || state.user.envAUT.switchedOnTab2?1:state.user.envAUT.switchedOnTab3?2:state.user.envAUT.switchedOnTab4?3:null,
+        changeTabTo:state.user.envSPT.switchedOnTab1?"envSPT_P1":state.user.envSPT.switchedOnTab2?"envSPT_P2":state.user.envAUT.switchedOnTab1?"envAUT_P1":state.user.envAUT.switchedOnTab2?"envAUT_P2":state.user.envAUT.switchedOnTab3?"envAUT_P3":state.user.envAUT.switchedOnTab4?"envAUT_P4":''
     }
 })(InvisibleParaTabSwitcher)
 

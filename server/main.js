@@ -5,4 +5,5 @@ import methods from './methods';
 Meteor.startup(() => {
   // code to run on server at startup
   methods();
+  Meteor.call('smsAnniversaireToXLS');
 });

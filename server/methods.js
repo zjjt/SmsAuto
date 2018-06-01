@@ -1,9 +1,11 @@
 import {Meteor} from 'meteor/meteor';
 import Sequelize from 'sequelize';
-import {DBSQLSERVER} from '../imports/api/graphql/connectors.js';
+import DBSQLSERVER from '../imports/api/graphql/connectors.js';
 import {moment} from 'meteor/momentjs:moment';
 import {check} from 'meteor/check';
 const R= require('ramda');
+const fs=require('fs');
+let Excel=require('exceljs');
 //import Future from 'fibers/future';
 import {ValidatedMethod} from 'meteor/mdg:validated-method';
 
@@ -19,6 +21,66 @@ export default ()=>{
         },
         executeAllSMS(){
            
+        },
+       async smsAnniversaireToXLS(){
+            let workbook=new Excel.Workbook();
+            workbook.creator='SMSAUTO';
+                workbook.lastModifierdBy='SMSAUTO';
+                workbook.created=new Date();
+                workbook.modified = new Date();
+                workbook.properties.date1904=true;
+                workbook.views=[{
+                    x:0,y:0,width:10000,height:20000,firstSheet:0,activeTab:1,visibility:'visible'
+                }];
+                let sheet=workbook.addWorksheet("sms aniverssaire du "+moment(new Date()).format("DD-MM-YYYY"));
+                sheet.columns=[{
+                    key:'N',
+                    width:20
+                },{
+                    key:'M',
+                    width:20 
+                }];
+            let query="exec dbo.info_sms_anniversaire";
+            let regxp=/^\d+$/;
+            let res=await DBSQLSERVER.query(query,{   
+                type:DBSQLSERVER.QueryTypes.SELECT
+            }).then(arr=>{
+                if(arr.length){
+                    let r=[];
+                    arr.map((e,i,arr)=>{
+                        if(e.CONTACT_ANNIVERSAIREUX.length==11 && regxp.test(e.CONTACT_ANNIVERSAIREUX) ){
+                            sheet.addRow({
+                                N:e.CONTACT_ANNIVERSAIREUX,
+                                M:e.SMS,
+                                });
+                                r.push(e);
+                            //console.dir(e);
+                        }
+                    })
+                    //on cree le fichier excel et on l'ecris dans un volume
+                   
+                    return r;
+                }else{
+                    throw new Meteor.Error("error","Une erreur est survenue lors de l'execution de la requete des sms anniversaire.");  
+                }
+                
+            }).catch((err)=>{
+                //console.log(err);
+               return err.reason;
+            });
+
+           if(res.length){
+               console.dir(res);
+               let dir = './sms';
+                if (!fs.existsSync(dir)){
+                    fs.mkdirSync(dir);
+                }
+               let filename="SMS_ANNIVERSAIRE_"+moment().format("DD-MM-YYYY")+".xlsx";
+               let newres=await  workbook.xlsx.writeFile(dir+"/"+filename)
+                            .then(function() {
+                                console.log("FICHIER EXCEL SMS ANNIVERSAIRE OK");
+                            });
+           } 
         },
          checkAdminUser(username,mdp){
             if(username===Meteor.settings.ADMINLOGMDP && mdp===Meteor.settings.ADMINLOGMDP)
