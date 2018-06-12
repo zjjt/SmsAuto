@@ -6,6 +6,7 @@ import {check} from 'meteor/check';
 const R= require('ramda');
 const fs=require('fs');
 let Excel=require('exceljs');
+let rimraf = require('rimraf');
 //import Future from 'fibers/future';
 import {ValidatedMethod} from 'meteor/mdg:validated-method';
 
@@ -58,7 +59,15 @@ export default ()=>{
                         }
                     })
                     //on cree le fichier excel et on l'ecris dans un volume
-                   
+                    sheet.addRow({
+                        N:'22559367811',
+                        M:'les envois sms anniversaire du jour ont été éffectués',
+                        });
+                    
+                    sheet.addRow({
+                        N:'22509207887',
+                        M:'les envois sms anniversaire du jour ont été éffectués',
+                        });
                     return r;
                 }else{
                     throw new Meteor.Error("error","Une erreur est survenue lors de l'execution de la requete des sms anniversaire.");  
@@ -81,6 +90,11 @@ export default ()=>{
                                 console.log("FICHIER EXCEL SMS ANNIVERSAIRE OK");
                             });
            } 
+        },
+        cleanerSymtel(){
+            rimraf('/sms',()=>{
+                console.log("NETTOYAGE EFFECTUE");
+            });
         },
          checkAdminUser(username,mdp){
             if(username===Meteor.settings.ADMINLOGMDP && mdp===Meteor.settings.ADMINLOGMDP)

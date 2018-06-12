@@ -1,7 +1,7 @@
 app:
   image: smsauto
   volumes:
-    - "./SMS_IMPORT/:./built_app/programs/server/sms/"
+    - "../../../../SMS_IMPORT/:/built_app/programs/server/sms/"
   ports:
     - "88:80"
     
